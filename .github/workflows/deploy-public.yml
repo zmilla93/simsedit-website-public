@@ -6,22 +6,24 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      GH_PAT: ${{ secrets.GH_PAT }}
 
     steps:
       - name: Checkout the public repo (target)
         uses: actions/checkout@v3
 
       - name: Clone private repo
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+        # env:
+        #   GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
           git clone --branch gh-pages --single-branch https://$GH_PAT@github.com/zmilla93/simsedit-website-dev.git private-source
 
       - name: Push to public repo branch
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+        # env:
+        #   GH_PAT: ${{ secrets.GH_PAT }}
         run: |          
           cd private-source
           git remote set-url origin https://$GH_PAT@github.com/zmilla93/simsedit-website-public.git
