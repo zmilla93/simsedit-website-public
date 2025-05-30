@@ -20,6 +20,8 @@ jobs:
           git clone --branch gh-pages --single-branch https://$GH_PAT@github.com/zmilla93/simsedit-website-dev.git private-source
 
       - name: Push to public repo branch
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |          
           cd private-source
           git remote set-url origin https://$GH_PAT@github.com/zmilla93/simsedit-website-public.git
