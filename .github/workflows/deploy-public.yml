@@ -1,0 +1,26 @@
+name: Deploy to Public Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the public repo (target)
+        uses: actions/checkout@v3
+
+      - name: Clone private repo
+        env:
+          GH_PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git clone --branch gh-pages --single-branch https://$GH_PAT@github.com/zmilla93/simsedit-website-dev.git private-source
+
+      - name: Push to public repo branch
+        run: |          
+          cd private-source
+          git remote set-url origin https://$GH_PAT@github.com/zmilla93/simsedit-website-public.git
+          git push --force origin gh-pages
